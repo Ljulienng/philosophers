@@ -1,0 +1,118 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_one.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
+/*   Updated: 2021/02/17 15:47:52 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo_one.h"
+
+static void	philo_loop2(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->fork);
+	printf("%ld: Philo #%d has taken a fork\n",\
+	current_stamp(philo->time), philo->id);
+	pthread_mutex_lock(philo->prev_fork);
+	printf("%ld: Philo #%d has taken a fork\n",\
+	current_stamp(philo->time), philo->id);
+	philo->tmp_eat = ft_time();
+	printf("%ld: Philo #%d is eating\n",\
+	current_stamp(philo->time), philo->id);
+	custom_usleep(philo->time_to_eat);
+	philo->eaten++;
+	pthread_mutex_unlock(&philo->fork);
+	pthread_mutex_unlock(philo->prev_fork);
+	printf("%ld: Philo #%d is sleeping\n",\
+	current_stamp(philo->time), philo->id);
+	custom_usleep(philo->time_to_sleep);
+	printf("%ld: Philo #%d is thinking\n",\
+	current_stamp(philo->time), philo->id);
+}
+
+void		*philo_loop(void *arg)
+{
+	t_philo		*philo;
+	pthread_t	tid;
+
+	philo = (t_philo *)arg;
+	pthread_create(&tid, NULL, death_loop, philo);
+	while (philo->eat_count == -1 || philo->eat_count > philo->eaten)
+		philo_loop2(philo);
+	return (NULL);
+}
+
+void		*death_loop(void *arg)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)arg;
+	while (42)
+	{
+		if (philo->eat_count != -1 && philo->eaten >= philo->eat_count)
+		{
+			custom_usleep((float)philo->id);
+			pthread_mutex_unlock(philo->eating);
+			break ;
+		}
+		else if (philo->time_to_die < ft_time() - philo->tmp_eat)
+		{
+			printf("%ld: Philo #%d died\n",\
+			current_stamp(philo->time), philo->id);
+			pthread_mutex_unlock(philo->thinking);
+			break ;
+		}
+	}
+	return (NULL);
+}
+
+void		*meal_loop(void *arg)
+{
+	t_philo	*philo;
+	int		i;
+
+	philo = (t_philo *)arg;
+	i = 0;
+	if (philo->eat_count != 0)
+		pthread_mutex_lock(philo->eating);
+	while (philo->eat_count != 0 && i < philo->nb)
+	{
+		pthread_mutex_lock(philo->eating);
+		i++;
+	}
+	printf("%ld: Everyone has eaten enough !\n", current_stamp(philo->time));
+	pthread_mutex_unlock(philo->thinking);
+	return (NULL);
+}
+
+void		exec_philo(t_philo *philo)
+{
+	pthread_t		tid;
+	int				i;
+	pthread_mutex_t	thinking;
+	pthread_mutex_t	eating;
+
+	i = 0;
+	pthread_mutex_init(&thinking, NULL);
+	pthread_mutex_init(&eating, NULL);
+	pthread_mutex_lock(&thinking);
+	while (i < philo[0].nb)
+	{
+		philo[i].thinking = &thinking;
+		philo[i].eating = &eating;
+		pthread_create(&tid, NULL, philo_loop, &philo[i++]);
+	}
+	if (philo[0].eat_count > -1)
+		pthread_create(&tid, NULL, meal_loop, &philo[0]);
+	pthread_mutex_lock(&thinking);
+	i = 0;
+	while (i < philo[0].nb)
+		pthread_mutex_destroy(&philo[i++].fork);
+	pthread_mutex_destroy(&thinking);
+	pthread_mutex_destroy(&eating);
+	free(philo);
+}
