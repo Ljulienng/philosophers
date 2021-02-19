@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/02/18 16:07:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:21:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <pthread.h>
+# include <signal.h>
 # include <semaphore.h>
 # include <sys/wait.h>
 # include <sys/time.h>

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/18 16:07:29 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/19 14:39:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,7 @@ int			main(int ac, char **av)
 	init_philosophers(&philo);
 	sem_close(philo.fork);
 	sem_close(philo.eating);
+	sem_unlink("fork");
+	sem_unlink("eating");
 	return (0);
 }
