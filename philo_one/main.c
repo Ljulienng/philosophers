@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/16 14:45:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/19 17:01:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ void		init_philosophers(t_philo *philo, char **av)
 	while (i < ft_atoi(av[1]))
 	{
 		pthread_mutex_init(&philo[i].fork, NULL);
-		philo[i].prev_fork = NULL;
-		if (i != 0)
-			philo[i].prev_fork = &philo[i - 1].fork;
+		philo[i].prev_fork = (i != 0) ? &philo[i - 1].fork : NULL;
 		philo[i].id = i + 1;
 		philo[i].nb = ft_atoi(av[1]);
 		philo[i].time = ft_time();
