@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/19 17:01:44 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/19 17:11:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void		init_philosophers(t_philo *philo, char **av)
 		philo[i].eaten = 0;
 		i++;
 	}
-	philo[0].prev_fork = &philo[i].fork;
 }
 
 int			main(int ac, char **av)
