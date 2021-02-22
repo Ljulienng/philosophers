@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/18 16:08:21 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/22 14:18:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,13 @@ static void	philo_loop2(t_philo *philo)
 	current_stamp(philo->time), philo->id);
 }
 
-void		*philo_loop(t_philo *philo)
+void		philo_loop(t_philo philo)
 {
 	pthread_t	tid;
 
-	pthread_create(&tid, NULL, death_loop, philo);
-	while (philo->eat_count == -1 || philo->eat_count > philo->eaten)
-		philo_loop2(philo);
-	return (NULL);
+	pthread_create(&tid, NULL, death_loop, &philo);
+	while (42)
+		philo_loop2(&philo);
 }
 
 void		*death_loop(void *arg)
@@ -47,15 +46,15 @@ void		*death_loop(void *arg)
 	t_philo *philo;
 	int		var;
 
-	var = 1;
 	philo = (t_philo *)arg;
+	var = 1;
 	while (42)
 	{
 		if (philo->eat_count != -1 && philo->eaten >= philo->eat_count && var)
 		{
 			sem_post(philo->eating);
 			var = 0;
-			break ;
+			return (NULL);
 		}
 		else if (philo->time_to_die < ft_time() - philo->tmp_eat)
 		{
@@ -74,12 +73,16 @@ void		*meal_loop(void *arg)
 
 	philo = (t_philo *)arg;
 	i = 0;
-	while (philo->eat_count != 0 && i < philo->nb)
+	while (i < philo->nb)
 	{
 		sem_wait(philo->eating);
 		i++;
 	}
+	i = 0;
 	printf("%ld: Everyone has eaten enough !\n", current_stamp(philo->time));
+	while (i < philo->nb)
+		kill(philo->pid[i++], SIGTERM);
+	free(philo->pid);
 	sem_unlink("fork");
 	sem_unlink("eating");
 	exit(0);
