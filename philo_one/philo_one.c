@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/19 17:13:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 14:03:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,18 @@
 static void	philo_loop2(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->fork);
-	printf("%ld: Philo #%d has taken a fork\n",\
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 0);
 	pthread_mutex_lock(philo->prev_fork);
-	printf("%ld: Philo #%d has taken a fork\n",\
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 0);
 	philo->tmp_eat = ft_time();
-	printf("%ld: Philo #%d is eating\n",\
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 1);
 	custom_usleep(philo->time_to_eat);
 	philo->eaten++;
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->prev_fork);
-	printf("%ld: Philo #%d is sleeping\n",\
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 2);
 	custom_usleep(philo->time_to_sleep);
-	printf("%ld: Philo #%d is thinking\n",\
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 3);
 }
 
 void		*philo_loop(void *arg)
@@ -63,8 +58,7 @@ void		*death_loop(void *arg)
 		}
 		else if (philo->time_to_die < ft_time() - philo->tmp_eat)
 		{
-			printf("%ld: Philo #%d died\n",\
-			current_stamp(philo->time), philo->id);
+			print_msg(philo, 4);
 			pthread_mutex_unlock(philo->thinking);
 			break ;
 		}
@@ -72,23 +66,20 @@ void		*death_loop(void *arg)
 	return (NULL);
 }
 
-void		*meal_loop(void *arg)
+static void	exec_philo2(t_philo *philo, pthread_t *tid,
+pthread_mutex_t *thinking, pthread_mutex_t *eating)
 {
-	t_philo	*philo;
-	int		i;
+	int i;
 
-	philo = (t_philo *)arg;
 	i = 0;
-	if (philo->eat_count != 0)
-		pthread_mutex_lock(philo->eating);
-	while (philo->eat_count != 0 && i < philo->nb)
-	{
-		pthread_mutex_lock(philo->eating);
-		i++;
-	}
-	printf("%ld: Everyone has eaten enough !\n", current_stamp(philo->time));
-	pthread_mutex_unlock(philo->thinking);
-	return (NULL);
+	if (philo[0].eat_count > -1)
+		pthread_create(tid, NULL, meal_loop, &philo[0]);
+	pthread_mutex_lock(thinking);
+	while (i < philo[0].nb)
+		pthread_mutex_destroy(&philo[i++].fork);
+	pthread_mutex_destroy(thinking);
+	pthread_mutex_destroy(eating);
+	free(philo);
 }
 
 void		exec_philo(t_philo *philo)
@@ -97,7 +88,9 @@ void		exec_philo(t_philo *philo)
 	int				i;
 	pthread_mutex_t	thinking;
 	pthread_mutex_t	eating;
+	int				died;
 
+	died = 1;
 	i = 0;
 	philo[0].prev_fork = &philo[philo[0].nb - 1].fork;
 	pthread_mutex_init(&thinking, NULL);
@@ -107,15 +100,8 @@ void		exec_philo(t_philo *philo)
 	{
 		philo[i].thinking = &thinking;
 		philo[i].eating = &eating;
+		philo[i].died = &died;
 		pthread_create(&tid, NULL, philo_loop, &philo[i++]);
 	}
-	if (philo[0].eat_count > -1)
-		pthread_create(&tid, NULL, meal_loop, &philo[0]);
-	pthread_mutex_lock(&thinking);
-	i = 0;
-	while (i < philo[0].nb)
-		pthread_mutex_destroy(&philo[i++].fork);
-	pthread_mutex_destroy(&thinking);
-	pthread_mutex_destroy(&eating);
-	free(philo);
+	exec_philo2(philo, &tid, &thinking, &eating);
 }

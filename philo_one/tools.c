@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/17 15:46:59 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 14:00:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,27 @@ void	custom_usleep(int sleep_time)
 		usleep(sleep_time);
 }
 
-long	current_stamp(long time)
+void	print_msg(t_philo *philo, int msg)
 {
-	long	stamp;
-
-	stamp = ft_time() - time;
-	return (stamp);
+	pthread_mutex_lock(philo->msg);
+	if (*philo->died == 0)
+	{
+		pthread_mutex_unlock(philo->msg);
+		return ;
+	}
+	printf("%ld: Philo #%d ", current_stamp(philo->time), philo->id);
+	if (!msg)
+		printf("has taken a fork\n");
+	else if (msg == 1)
+		printf("is eating\n");
+	else if (msg == 2)
+		printf("is sleeping\n");
+	else if (msg == 3)
+		printf("is thinking\n");
+	else if (msg == 4)
+	{
+		*philo->died = 0;
+		printf("died\n");
+	}
+	pthread_mutex_unlock(philo->msg);
 }

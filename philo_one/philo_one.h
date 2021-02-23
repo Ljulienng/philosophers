@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/02/17 15:47:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 13:48:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct		s_philo
 	pthread_mutex_t	*prev_fork;
 	pthread_mutex_t	*thinking;
 	pthread_mutex_t	*eating;
+	pthread_mutex_t	*msg;
 	int				id;
 	int				nb;
 	int				time_to_die;
@@ -35,7 +36,7 @@ typedef struct		s_philo
 	int				eaten;
 	long			time;
 	long			tmp_eat;
-
+	int				*died;
 }					t_philo;
 
 int					main(int ac, char **av);
@@ -48,4 +49,5 @@ void				exec_philo(t_philo *philo);
 void				*death_loop(void *arg);
 void				*meal_loop(void *arg);
 void				*philo_loop(void *arg);
+void				print_msg(t_philo *philo, int msg);
 #endif
