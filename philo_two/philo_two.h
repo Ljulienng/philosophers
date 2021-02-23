@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/02/17 15:46:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 15:33:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct		s_philo
 	sem_t			*fork;
 	sem_t			*eating;
 	sem_t			*death;
+	sem_t			*msg;
 	int				id;
 	int				nb;
 	int				time_to_die;
@@ -49,4 +50,5 @@ void				exec_philo(t_philo *philo);
 void				*death_loop(void *arg);
 void				*meal_loop(void *arg);
 void				*philo_loop(void *arg);
+void				print_msg(t_philo *philo, int msg);
 #endif

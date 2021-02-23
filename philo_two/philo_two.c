@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/19 16:11:21 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 15:59:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,20 @@ static void	philo_loop2(t_philo *philo)
 	sem_wait(philo->fork);
 	if (*philo->no_run != 0)
 	{
-		printf("%ld: Philo #%d has taken a fork\n",
-		current_stamp(philo->time), philo->id);
-		printf("%ld: Philo #%d has taken a fork\n",
-		current_stamp(philo->time), philo->id);
+		print_msg(philo, 0);
+		print_msg(philo, 0);
 	}
 	philo->tmp_eat = ft_time();
 	if (*philo->no_run != 0)
-		printf("%ld: Philo #%d is eating\n",
-		current_stamp(philo->time), philo->id);
+		print_msg(philo, 1);
 	custom_usleep(philo->time_to_eat);
 	philo->eaten++;
 	sem_post(philo->fork);
 	if (*philo->no_run != 0)
-		printf("%ld: Philo #%d is sleeping\n",
-		current_stamp(philo->time), philo->id);
+		print_msg(philo, 2);
 	custom_usleep(philo->time_to_sleep);
 	if (*philo->no_run != 0)
-		printf("%ld: Philo #%d is thinking\n",
-		current_stamp(philo->time), philo->id);
+		print_msg(philo, 3);
 }
 
 void		*philo_loop(void *arg)
@@ -68,9 +63,7 @@ void		*death_loop(void *arg)
 		}
 		else if (philo->time_to_die < ft_time() - philo->tmp_eat)
 		{
-			*philo->no_run = 0;
-			printf("%ld: Philo #%d died\n",
-			current_stamp(philo->time), philo->id);
+			print_msg(philo, 4);
 			sem_post(philo->death);
 			return (NULL);
 		}

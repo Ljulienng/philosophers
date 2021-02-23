@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/22 14:04:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 17:48:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,17 +89,26 @@ void		init_philosophers(t_philo philo)
 int			main(int ac, char **av)
 {
 	t_philo philo;
+	int		died;
+	sem_t	*msg;
 
+	died = 1;
 	if (!(arg_check(ac, av)))
 		return (1);
 	init2(&philo, av);
 	sem_unlink("fork");
 	sem_unlink("eating");
+	sem_unlink("msg");
 	philo.fork = sem_open("fork", O_CREAT, S_IRWXU, (philo.nb / 2));
+	msg = sem_open("msg", O_CREAT, S_IRWXU, 1);
 	philo.eating = sem_open("eating", O_CREAT, S_IRWXU, 0);
+	philo.msg = msg;
+	philo.died = &died;
 	init_philosophers(philo);
 	sem_close(philo.fork);
 	sem_close(philo.eating);
+	sem_close(philo.msg);
+	sem_unlink("msg");
 	sem_unlink("fork");
 	sem_unlink("eating");
 	return (0);

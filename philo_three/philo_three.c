@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/22 14:18:47 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 18:00:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,16 @@
 static void	philo_loop2(t_philo *philo)
 {
 	sem_wait(philo->fork);
-	printf("%ld: Philo #%d has taken a fork\n",
-	current_stamp(philo->time), philo->id);
-	printf("%ld: Philo #%d has taken a fork\n",
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 0);
+	print_msg(philo, 0);
 	philo->tmp_eat = ft_time();
-	printf("%ld: Philo #%d is eating\n",
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 1);
 	custom_usleep(philo->time_to_eat);
 	philo->eaten++;
 	sem_post(philo->fork);
-	printf("%ld: Philo #%d is sleeping\n",
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 2);
 	custom_usleep(philo->time_to_sleep);
-	printf("%ld: Philo #%d is thinking\n",
-	current_stamp(philo->time), philo->id);
+	print_msg(philo, 3);
 }
 
 void		philo_loop(t_philo philo)
@@ -37,6 +32,7 @@ void		philo_loop(t_philo philo)
 	pthread_t	tid;
 
 	pthread_create(&tid, NULL, death_loop, &philo);
+	pthread_detach(tid);
 	while (42)
 		philo_loop2(&philo);
 }
@@ -57,11 +53,7 @@ void		*death_loop(void *arg)
 			return (NULL);
 		}
 		else if (philo->time_to_die < ft_time() - philo->tmp_eat)
-		{
-			printf("%ld: Philo #%d died\n",
-			current_stamp(philo->time), philo->id);
-			exit(0);
-		}
+			print_msg(philo, 4);
 	}
 	return (NULL);
 }
@@ -85,6 +77,7 @@ void		*meal_loop(void *arg)
 	free(philo->pid);
 	sem_unlink("fork");
 	sem_unlink("eating");
+	sem_unlink("msg");
 	exit(0);
 	return (NULL);
 }

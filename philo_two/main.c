@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 14:05:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 15:58:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,12 @@ void		init_philosophers(t_philo *philo, char **av)
 	int				i;
 	int				no_run;
 	pthread_t		tid;
+	sem_t			*msg;
 
 	no_run = 1;
 	i = 0;
+	sem_unlink("msg");
+	msg = sem_open("msg", O_CREAT, S_IRWXU, 1);
 	while (i < ft_atoi(av[1]))
 	{
 		init2(philo, av, i);
@@ -69,6 +72,7 @@ void		init_philosophers(t_philo *philo, char **av)
 			philo[i].eat_count = ft_atoi(av[5]);
 		else
 			philo[i].eat_count = -1;
+		philo[i].msg = msg;
 		philo[i].no_run = &no_run;
 		pthread_create(&tid, NULL, philo_loop, &philo[i++]);
 	}
@@ -76,6 +80,7 @@ void		init_philosophers(t_philo *philo, char **av)
 		pthread_create(&tid, NULL, meal_loop, &philo[0]);
 	sem_wait(philo[0].death);
 	custom_usleep(philo[0].time_to_eat + philo[0].time_to_sleep);
+	sem_close(msg);
 }
 
 int			main(int ac, char **av)
@@ -96,6 +101,7 @@ int			main(int ac, char **av)
 	sem_close(philo[0].fork);
 	sem_close(philo[0].eating);
 	sem_close(philo[0].death);
+	sem_unlink("msg");
 	sem_unlink("fork");
 	sem_unlink("eating");
 	sem_unlink("death");
