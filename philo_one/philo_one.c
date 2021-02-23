@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 14:03:26 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 18:53:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ pthread_mutex_t *thinking, pthread_mutex_t *eating)
 		pthread_mutex_destroy(&philo[i++].fork);
 	pthread_mutex_destroy(thinking);
 	pthread_mutex_destroy(eating);
+	pthread_mutex_destroy(philo->msg);
 	free(philo);
 }
 

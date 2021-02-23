@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 18:00:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 18:13:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ long	current_stamp(long time)
 
 void	print_msg(t_philo *philo, int msg)
 {
-	sem_wait(philo->msg);
 	if (*philo->died == 0)
 		exit(1);
+	sem_wait(philo->msg);
 	printf("%ld: Philo #%d ", current_stamp(philo->time), philo->id);
 	if (!msg)
 		printf("has taken a fork\n");

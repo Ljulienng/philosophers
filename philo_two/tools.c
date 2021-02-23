@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 15:49:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 18:23:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ void	print_msg(t_philo *philo, int msg)
 		printf("is thinking\n");
 	else if (msg == 4)
 	{
-		*philo->no_run = 0;
 		printf("died\n");
+		*philo->no_run = 0;
 	}
 	sem_post(philo->msg);
 }
