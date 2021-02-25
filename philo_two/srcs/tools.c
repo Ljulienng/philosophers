@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 18:23:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 21:02:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	print_msg(t_philo *philo, int msg)
 	sem_wait(philo->msg);
 	if (*philo->no_run == 0)
 	{
-		sem_wait(philo->msg);
+		sem_post(philo->msg);
 		return ;
 	}
 	printf("%ld: Philo #%d ", current_stamp(philo->time), philo->id);

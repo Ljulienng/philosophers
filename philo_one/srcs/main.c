@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 19:50:43 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 20:49:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ void		*meal_loop(void *arg)
 
 void		init_philosophers(t_philo *philo, char **av)
 {
-	int				i;
+	int		i;
+	long	time;
 
+	time = ft_time();
 	i = 0;
 	while (i < ft_atoi(av[1]))
 	{
@@ -80,7 +82,7 @@ void		init_philosophers(t_philo *philo, char **av)
 		philo[i].id = i + 1;
 		philo[i].died = 0;
 		philo[i].nb = ft_atoi(av[1]);
-		philo[i].time = ft_time();
+		philo[i].time = time;
 		philo[i].time_to_die = ft_atoi(av[2]);
 		philo[i].time_to_eat = ft_atoi(av[3]);
 		philo[i].time_to_sleep = ft_atoi(av[4]);
@@ -88,7 +90,7 @@ void		init_philosophers(t_philo *philo, char **av)
 			philo[i].eat_count = ft_atoi(av[5]);
 		else
 			philo[i].eat_count = -1;
-		philo[i].tmp_eat = ft_time();
+		philo[i].tmp_eat = time;
 		philo[i].eaten = 0;
 		i++;
 	}
