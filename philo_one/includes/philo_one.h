@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 13:18:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 19:51:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct		s_philo
 	int				time_to_sleep;
 	int				eat_count;
 	int				eaten;
+	int				i;
 	long			time;
 	long			tmp_eat;
 	int				*died;

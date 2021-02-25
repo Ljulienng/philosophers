@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 15:39:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 19:50:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,7 @@ void		*meal_loop(void *arg)
 void		init_philosophers(t_philo *philo, char **av)
 {
 	int				i;
-	pthread_mutex_t msg;
 
-	pthread_mutex_init(&msg, NULL);
 	i = 0;
 	while (i < ft_atoi(av[1]))
 	{
@@ -92,7 +90,6 @@ void		init_philosophers(t_philo *philo, char **av)
 			philo[i].eat_count = -1;
 		philo[i].tmp_eat = ft_time();
 		philo[i].eaten = 0;
-		philo[i].msg = &msg;
 		i++;
 	}
 }

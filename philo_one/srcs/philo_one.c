@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 12:47:22 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 19:52:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,23 +86,25 @@ pthread_mutex_t *thinking, pthread_mutex_t *eating)
 void		exec_philo(t_philo *philo)
 {
 	pthread_t		tid;
-	int				i;
 	pthread_mutex_t	thinking;
 	pthread_mutex_t	eating;
+	pthread_mutex_t	msg;
 	int				died;
 
 	died = 1;
-	i = 0;
+	philo->i = 0;
 	philo[0].prev_fork = &philo[philo[0].nb - 1].fork;
 	pthread_mutex_init(&thinking, NULL);
 	pthread_mutex_init(&eating, NULL);
 	pthread_mutex_lock(&thinking);
-	while (i < philo[0].nb)
+	pthread_mutex_init(&msg, NULL);
+	while (philo->i < philo[0].nb)
 	{
-		philo[i].thinking = &thinking;
-		philo[i].eating = &eating;
-		philo[i].died = &died;
-		pthread_create(&tid, NULL, philo_loop, &philo[i++]);
+		philo[philo->i].thinking = &thinking;
+		philo[philo->i].eating = &eating;
+		philo[philo->i].died = &died;
+		philo[philo->i].msg = &msg;
+		pthread_create(&tid, NULL, philo_loop, &philo[philo->i++]);
 	}
 	exec_philo2(philo, &tid, &thinking, &eating);
 }

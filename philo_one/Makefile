@@ -1,20 +1,21 @@
 NAME = philo_one
+SRCS =	srcs/main.c \
+		srcs/philo_one.c \
+		srcs/tools.c
 
+OBJS = $(SRCS:.c=.o)
 CC = gcc
+INCLUDES = ./includes/
 HEADERS = philo_one.h
-CFLAGS = -Werror -Wall -Wextra -g3
-SRCS =	main.c \
-		philo_one.c \
-		tools.c
+CFLAGS = -Werror -Wall -Wextra -g3 -pthread -I $(INCLUDES)
 
 SRCS_FILE = SRCS
 
-OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -lpthread -o $(NAME)
+			$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	rm -f $(OBJS)
