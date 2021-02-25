@@ -2,7 +2,7 @@ NAME = philo_two
 
 CC = gcc
 HEADERS = philo_two.h
-CFLAGS = -Werror -Wall -Wextra -g
+CFLAGS = -Werror -Wall -Wextra -g3
 SRCS =	main.c \
 		philo_two.c \
 		tools.c

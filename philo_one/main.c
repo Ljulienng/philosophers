@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 14:03:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 19:20:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ void		init_philosophers(t_philo *philo, char **av)
 	int				i;
 	pthread_mutex_t msg;
 
-	pthread_mutex_init(&msg, NULL);
+	if (pthread_mutex_init(&msg, NULL) != 0)
+		printf("did not init\n");
 	i = 0;
 	while (i < ft_atoi(av[1]))
 	{
