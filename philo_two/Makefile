@@ -1,7 +1,8 @@
 NAME = philo_two
 SRCS =	srcs/main.c \
 		srcs/philo_two.c \
-		srcs/tools.c
+		srcs/tools.c \
+		srcs/ft_itoa.c
 
 OBJS = $(SRCS:.c=.o)
 CC = gcc

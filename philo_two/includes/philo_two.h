@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 15:33:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 15:30:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,6 @@ void				*death_loop(void *arg);
 void				*meal_loop(void *arg);
 void				*philo_loop(void *arg);
 void				print_msg(t_philo *philo, int msg);
+char				*ft_itoa(long n);
+int					ft_strlen(const char *str);
 #endif

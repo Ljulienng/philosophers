@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 15:25:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 15:28:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		custom_usleep(int sleep_time)
 static void	print_msg2(int msg, char *time, char *id)
 {
 	write(1, time, ft_strlen(time));
-	write (1, ": philo #", 9);
+	write(1, ": philo #", 9);
 	write(1, id, ft_strlen(id));
 	if (!msg)
 		write(1, " has taken a fork\n", 18);

@@ -6,13 +6,13 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 15:17:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 15:32:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int		ft_atoi(const char *str)
+int			ft_atoi(const char *str)
 {
 	unsigned int	i;
 	int				sign;
@@ -38,7 +38,7 @@ int		ft_atoi(const char *str)
 	return (num * sign);
 }
 
-long	ft_time(void)
+long		ft_time(void)
 {
 	struct timeval	time;
 	long			ret;
@@ -49,7 +49,7 @@ long	ft_time(void)
 	return (ret);
 }
 
-void	custom_usleep(int sleep_time)
+void		custom_usleep(int sleep_time)
 {
 	long	time;
 
@@ -58,32 +58,40 @@ void	custom_usleep(int sleep_time)
 		usleep(sleep_time);
 }
 
-long	current_stamp(long time)
+static void	print_msg2(int msg, char *time, char *id)
 {
-	long	stamp;
-
-	stamp = ft_time() - time;
-	return (stamp);
+	write(1, time, ft_strlen(time));
+	write(1, ": philo #", 9);
+	write(1, id, ft_strlen(id));
+	if (!msg)
+		write(1, " has taken a fork\n", 18);
+	else if (msg == 1)
+		write(1, " is eating\n", 11);
+	else if (msg == 2)
+		write(1, " is sleeping\n", 13);
+	else if (msg == 3)
+		write(1, " is thinking\n", 13);
+	else
+		write(1, " died\n", 6);
 }
 
-void	print_msg(t_philo *philo, int msg)
+void		print_msg(t_philo *philo, int msg)
 {
-	if (*philo->no_run == 0)
-		return ;
+	char	*time;
+	char	*id;
+
+	time = ft_itoa(current_stamp(philo->time));
+	id = ft_itoa(philo->id);
 	sem_wait(philo->msg);
-	printf("%ld: Philo #%d ", current_stamp(philo->time), philo->id);
-	if (!msg)
-		printf("has taken a fork\n");
-	else if (msg == 1)
-		printf("is eating\n");
-	else if (msg == 2)
-		printf("is sleeping\n");
-	else if (msg == 3)
-		printf("is thinking\n");
-	else if (msg == 4)
+	if (*philo->no_run == 0)
+		sem_post(philo->msg);
+	else
 	{
-		printf("died\n");
-		*philo->no_run = 0;
+		if (msg == 4)
+			*philo->no_run = 0;
+		print_msg2(msg, time, id);
+		sem_post(philo->msg);
 	}
-	sem_post(philo->msg);
+	free(time);
+	free(id);
 }
