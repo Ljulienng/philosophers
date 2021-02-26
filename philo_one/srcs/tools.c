@@ -6,13 +6,13 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 15:17:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 15:25:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-int		ft_atoi(const char *str)
+int			ft_atoi(const char *str)
 {
 	unsigned int	i;
 	int				sign;
@@ -38,7 +38,7 @@ int		ft_atoi(const char *str)
 	return (num * sign);
 }
 
-long	ft_time(void)
+long		ft_time(void)
 {
 	struct timeval	time;
 	long			ret;
@@ -49,7 +49,7 @@ long	ft_time(void)
 	return (ret);
 }
 
-void	custom_usleep(int sleep_time)
+void		custom_usleep(int sleep_time)
 {
 	long	time;
 
@@ -58,20 +58,11 @@ void	custom_usleep(int sleep_time)
 		usleep(sleep_time);
 }
 
-void	print_msg(t_philo *philo, int msg)
+static void	print_msg2(int msg, char *time, char *id)
 {
-	char	*time;
-	char	*id;
-
-	if (*philo->died == 0)
-		return ;
-	time = ft_itoa(current_stamp(philo->time));
-	id = ft_itoa(philo->id);
-	pthread_mutex_lock(philo->msg);
 	write(1, time, ft_strlen(time));
 	write (1, ": philo #", 9);
 	write(1, id, ft_strlen(id));
-	// printf("%ld: Philo #%d ", current_stamp(philo->time), philo->id);
 	if (!msg)
 		write(1, " has taken a fork\n", 18);
 	else if (msg == 1)
@@ -81,11 +72,26 @@ void	print_msg(t_philo *philo, int msg)
 	else if (msg == 3)
 		write(1, " is thinking\n", 13);
 	else
-	{
-		*philo->died = 0;
 		write(1, " died\n", 6);
+}
+
+void		print_msg(t_philo *philo, int msg)
+{
+	char	*time;
+	char	*id;
+
+	time = ft_itoa(current_stamp(philo->time));
+	id = ft_itoa(philo->id);
+	pthread_mutex_lock(philo->msg);
+	if (*philo->died == 0)
+		pthread_mutex_unlock(philo->msg);
+	else
+	{
+		if (msg == 4)
+			*philo->died = 0;
+		print_msg2(msg, time, id);
+		pthread_mutex_unlock(philo->msg);
 	}
-	pthread_mutex_unlock(philo->msg);
 	free(time);
 	free(id);
 }
