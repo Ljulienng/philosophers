@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 12:46:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 15:17:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,30 +58,34 @@ void	custom_usleep(int sleep_time)
 		usleep(sleep_time);
 }
 
-void	print_msg(void *arg, int msg)
+void	print_msg(t_philo *philo, int msg)
 {
-	t_philo	*philo;
+	char	*time;
+	char	*id;
 
-	philo = (t_philo *)arg;
-	pthread_mutex_lock((philo->msg));
 	if (*philo->died == 0)
-	{
-		pthread_mutex_unlock((philo->msg));
 		return ;
-	}
-	printf("%ld: Philo #%d ", current_stamp(philo->time), philo->id);
+	time = ft_itoa(current_stamp(philo->time));
+	id = ft_itoa(philo->id);
+	pthread_mutex_lock(philo->msg);
+	write(1, time, ft_strlen(time));
+	write (1, ": philo #", 9);
+	write(1, id, ft_strlen(id));
+	// printf("%ld: Philo #%d ", current_stamp(philo->time), philo->id);
 	if (!msg)
-		printf("has taken a fork\n");
+		write(1, " has taken a fork\n", 18);
 	else if (msg == 1)
-		printf("is eating\n");
+		write(1, " is eating\n", 11);
 	else if (msg == 2)
-		printf("is sleeping\n");
+		write(1, " is sleeping\n", 13);
 	else if (msg == 3)
-		printf("is thinking\n");
-	else if (msg == 4)
+		write(1, " is thinking\n", 13);
+	else
 	{
 		*philo->died = 0;
-		printf("died\n");
+		write(1, " died\n", 6);
 	}
-	pthread_mutex_unlock((philo->msg));
+	pthread_mutex_unlock(philo->msg);
+	free(time);
+	free(id);
 }

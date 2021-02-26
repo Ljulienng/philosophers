@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 18:13:22 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 15:17:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	print_msg(t_philo *philo, int msg)
 		printf("is sleeping\n");
 	else if (msg == 3)
 		printf("is thinking\n");
-	else if (msg == 4)
+	else
 	{
 		*philo->died = 0;
 		printf("died\n");
