@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 15:43:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/03 16:45:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ void		custom_usleep(int sleep_time)
 static void	print_msg2(int msg, char *time, char *id)
 {
 	write(1, time, ft_strlen(time));
+	if (msg == 5)
+	{
+		write(1, ": Everyone has eaten enough !\n", 30);
+		return ;
+	}
 	write(1, ": philo #", 9);
 	write(1, id, ft_strlen(id));
 	if (!msg)
@@ -71,7 +76,7 @@ static void	print_msg2(int msg, char *time, char *id)
 		write(1, " is sleeping\n", 13);
 	else if (msg == 3)
 		write(1, " is thinking\n", 13);
-	else
+	else if (msg == 4)
 		write(1, " died\n", 6);
 }
 
