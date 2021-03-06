@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/03/03 16:45:08 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/06 13:51:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void		philo_loop(t_philo philo)
 
 	pthread_create(&tid, NULL, death_loop, &philo);
 	pthread_detach(tid);
-	while ((philo.eat_count == -1 && 42) || \
+	while (philo.eat_count == -1 || \
 	(philo.eat_count > 0 && philo.eat_count > philo.eaten))
 		philo_loop2(&philo);
 	usleep(10000000);
