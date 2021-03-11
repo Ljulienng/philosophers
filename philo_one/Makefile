@@ -5,7 +5,7 @@ SRCS =	srcs/main.c \
 		srcs/ft_itoa.c
 
 OBJS = $(SRCS:.c=.o)
-CC = gcc
+CC = clang
 INCLUDES = ./includes/
 HEADERS = philo_one.h
 CFLAGS = -Werror -Wall -Wextra -g3 -pthread -I $(INCLUDES)
