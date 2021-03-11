@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 12:25:41 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 17:32:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ void		init_philosophers(t_philo *philo, char **av, int x)
 	i = 0;
 	sem_unlink("msg");
 	msg = sem_open("msg", O_CREAT, S_IRWXU, 1);
+	if (philo[0].eat_count == -1)
+		(void)tid2;
 	while (i < ft_atoi(av[1]))
 	{
 		init2(philo, av, i);
