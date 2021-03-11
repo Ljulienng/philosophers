@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 13:29:17 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 15:28:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 11:13:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ void		print_msg(t_philo *philo, int msg)
 	time = ft_itoa(current_stamp(philo->time));
 	id = ft_itoa(philo->id);
 	pthread_mutex_lock(philo->msg);
-	if (*philo->died == 0)
+	if (*philo->died == 0 ||
+	(philo->eat_count != -1 && philo->eaten >= philo->eat_count))
 		pthread_mutex_unlock(philo->msg);
 	else
 	{

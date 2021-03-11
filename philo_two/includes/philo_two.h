@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 15:30:13 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 11:56:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct		s_philo
 }					t_philo;
 
 int					main(int ac, char **av);
-void				init_philosophers(t_philo *philo, char **av);
+void				init_philosophers(t_philo *philo, char **av, int x);
 int					ft_atoi(const char *str);
 long				ft_time(void);
 void				custom_usleep(int sleep_time);

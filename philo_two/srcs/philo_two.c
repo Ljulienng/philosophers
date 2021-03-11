@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 21:02:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 12:24:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	philo_loop2(t_philo *philo)
 	print_msg(philo, 1);
 	custom_usleep(philo->time_to_eat);
 	philo->eaten++;
-	sem_post(philo->fork);
 	print_msg(philo, 2);
+	sem_post(philo->fork);
 	custom_usleep(philo->time_to_sleep);
 	print_msg(philo, 3);
 }
@@ -36,6 +36,7 @@ void		*philo_loop(void *arg)
 	philo->tmp_eat = philo->time;
 	philo->eaten = 0;
 	pthread_create(&tid, NULL, death_loop, philo);
+	pthread_detach(tid);
 	while (*philo->no_run && \
 	(philo->eat_count == -1 || philo->eat_count > philo->eaten))
 		philo_loop2(philo);
@@ -76,6 +77,11 @@ void		*meal_loop(void *arg)
 	{
 		sem_wait(philo->eating);
 		i++;
+		if (*philo->no_run == 0)
+		{
+			sem_post(philo->death);
+			return (NULL);
+		}
 	}
 	*philo->no_run = 0;
 	printf("%ld: Everyone has eaten enough !\n", current_stamp(philo->time));

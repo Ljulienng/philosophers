@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/03/06 13:51:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 16:00:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	philo_loop2(t_philo *philo)
 	print_msg(philo, 1);
 	custom_usleep(philo->time_to_eat);
 	philo->eaten++;
-	sem_post(philo->fork);
 	print_msg(philo, 2);
+	sem_post(philo->fork);
 	custom_usleep(philo->time_to_sleep);
 	print_msg(philo, 3);
 }
@@ -75,7 +75,7 @@ void		*meal_loop(void *arg)
 	i = 0;
 	print_msg(philo, 5);
 	while (i < philo->nb)
-		kill(philo->pid[i++], SIGTERM);
+		kill(philo->pid[i++], SIGKILL);
 	free(philo->pid);
 	sem_unlink("fork");
 	sem_unlink("eating");

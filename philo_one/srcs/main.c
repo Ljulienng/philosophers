@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:53:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 20:49:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 11:09:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ void		*meal_loop(void *arg)
 	{
 		pthread_mutex_lock(philo->eating);
 		i++;
+		if (*philo->died == 0)
+		{
+			pthread_mutex_unlock(philo->thinking);
+			return (NULL);
+		}
 	}
 	printf("%ld: Everyone has eaten enough !\n", current_stamp(philo->time));
 	pthread_mutex_unlock(philo->thinking);
@@ -99,12 +104,14 @@ void		init_philosophers(t_philo *philo, char **av)
 int			main(int ac, char **av)
 {
 	t_philo	*philo;
+	int		x;
 
+	x = 0;
 	if (!(arg_check(ac, av)))
 		return (1);
 	if (!(philo = malloc(sizeof(t_philo) * ft_atoi(av[1]))))
 		return (1);
 	init_philosophers(philo, av);
-	exec_philo(philo);
+	exec_philo(philo, x);
 	return (0);
 }

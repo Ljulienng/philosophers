@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 15:14:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 20:47:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int					ft_atoi(const char *str);
 long				ft_time(void);
 void				custom_usleep(int sleep_time);
 long				current_stamp(long time);
-void				exec_philo(t_philo *philo);
+void				exec_philo(t_philo *philo, int x);
 void				*death_loop(void *arg);
 void				*meal_loop(void *arg);
 void				*philo_loop(void *arg);

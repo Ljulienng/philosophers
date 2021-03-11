@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:54:50 by user42            #+#    #+#             */
-/*   Updated: 2021/02/25 19:52:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 12:03:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,17 @@ void		*philo_loop(void *arg)
 
 	philo = (t_philo *)arg;
 	pthread_create(&tid, NULL, death_loop, philo);
+	pthread_detach(tid);
 	philo->id % 2 ? 0 : \
 	custom_usleep((float)philo->time_to_eat * 0.9 + 1);
-	while (philo->eat_count == -1 || philo->eat_count > philo->eaten)
+	while ((*philo->died || philo->eat_count == -1)\
+	|| (philo->eat_count > philo->eaten))
+	{
 		philo_loop2(philo);
+		if (*philo->died == 0 || \
+		(philo->eat_count != -1 && philo->eaten >= philo->eat_count))
+			return (NULL);
+	}
 	return (NULL);
 }
 
@@ -48,7 +55,7 @@ void		*death_loop(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
-	while (42)
+	while (*philo->died)
 	{
 		if (philo->eat_count != -1 && philo->eaten >= philo->eat_count)
 		{
@@ -69,23 +76,33 @@ void		*death_loop(void *arg)
 static void	exec_philo2(t_philo *philo, pthread_t *tid,
 pthread_mutex_t *thinking, pthread_mutex_t *eating)
 {
-	int i;
+	pthread_t	tid2;
+	int			i;
+	int			x;
 
+	x = 0;
 	i = 0;
-	if (philo[0].eat_count > -1)
-		pthread_create(tid, NULL, meal_loop, &philo[0]);
+	if (philo[0].eat_count > -1 && *philo->died)
+		pthread_create(&tid2, NULL, meal_loop, &philo[0]);
 	pthread_mutex_lock(thinking);
 	while (i < philo[0].nb)
 		pthread_mutex_destroy(&philo[i++].fork);
+	while (x < philo->nb)
+		pthread_join(tid[x++], NULL);
+	if (philo[0].eat_count > -1)
+	{
+		pthread_mutex_unlock(philo->eating);
+		pthread_join(tid2, NULL);
+	}
 	pthread_mutex_destroy(thinking);
 	pthread_mutex_destroy(eating);
 	pthread_mutex_destroy(philo->msg);
 	free(philo);
 }
 
-void		exec_philo(t_philo *philo)
+void		exec_philo(t_philo *philo, int x)
 {
-	pthread_t		tid;
+	pthread_t		tid[philo->nb];
 	pthread_mutex_t	thinking;
 	pthread_mutex_t	eating;
 	pthread_mutex_t	msg;
@@ -98,13 +115,13 @@ void		exec_philo(t_philo *philo)
 	pthread_mutex_init(&eating, NULL);
 	pthread_mutex_lock(&thinking);
 	pthread_mutex_init(&msg, NULL);
-	while (philo->i < philo[0].nb)
+	while (philo->i < philo->nb)
 	{
 		philo[philo->i].thinking = &thinking;
 		philo[philo->i].eating = &eating;
 		philo[philo->i].died = &died;
 		philo[philo->i].msg = &msg;
-		pthread_create(&tid, NULL, philo_loop, &philo[philo->i++]);
+		pthread_create(&tid[x++], NULL, philo_loop, &philo[philo->i++]);
 	}
-	exec_philo2(philo, &tid, &thinking, &eating);
+	exec_philo2(philo, tid, &thinking, &eating);
 }
